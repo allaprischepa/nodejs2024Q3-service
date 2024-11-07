@@ -1,28 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import db from 'src/db';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    // This action adds a new user
+  async create(createUserDto: CreateUserDto) {
+    const { login } = createUserDto;
+    const existingUser = await db.user.findUnique({ where: { login } });
+
+    if (existingUser) {
+      throw new ConflictException(`User with login: ${login} already exists`);
+    }
+
     return db.user.create(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return db.user.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    return this.ensureUserExists(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    const { newPassword, oldPassword } = updatePasswordDto;
+    const user = await this.ensureUserExists(id);
+
+    if (!user.validatePassword(oldPassword)) {
+      throw new ForbiddenException('The old password is incorrect');
+    }
+
+    user.password = newPassword;
+
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    await this.ensureUserExists(id);
+
+    return db.user.delete(id);
+  }
+
+  private async ensureUserExists(id: string): Promise<UserEntity> {
+    const user = await db.user.findUnique(id);
+
+    if (!user) {
+      throw new NotFoundException(`User with id: ${id} not found`);
+    }
+
+    return user;
   }
 }

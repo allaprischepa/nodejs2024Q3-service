@@ -1,5 +1,7 @@
+import { Exclude, instanceToPlain } from 'class-transformer';
 import { v4 as uuidV4 } from 'uuid';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { hashSync, compareSync } from 'bcrypt';
 
 interface User {
   id: string;
@@ -15,7 +17,9 @@ export class UserEntity implements User {
   version: number;
   createdAt: number;
   updatedAt: number;
-  private password: string;
+
+  @Exclude()
+  private _password: string;
 
   constructor(createUserDto: CreateUserDto) {
     const { login, password } = createUserDto;
@@ -27,5 +31,17 @@ export class UserEntity implements User {
     this.version = 1;
     this.createdAt = now;
     this.updatedAt = now;
+  }
+
+  set password(newPassword: string) {
+    this._password = hashSync(newPassword, 10);
+  }
+
+  validatePassword(password: string) {
+    return compareSync(password, this._password);
+  }
+
+  toJSON() {
+    return instanceToPlain(this);
   }
 }
