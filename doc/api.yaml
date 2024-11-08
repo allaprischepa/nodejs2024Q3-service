@@ -314,6 +314,71 @@ paths:
           description: ""
       summary: Delete album
       tags: *a3
+  /track:
+    post:
+      operationId: TrackController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTrackDto"
+      responses:
+        "201":
+          description: ""
+      tags: &a4
+        - Track
+    get:
+      operationId: TrackController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a4
+  /track/{id}:
+    get:
+      operationId: TrackController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a4
+    patch:
+      operationId: TrackController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTrackDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a4
+    delete:
+      operationId: TrackController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a4
 info:
   title: Home Library Service
   description: Home music library service
@@ -473,3 +538,13 @@ components:
           type: string
           description: Album artist id
           example: 6476c336-c646-4c28-bbea-7390b385518a
+      required:
+        - name
+        - year
+        - artistId
+    CreateTrackDto:
+      type: object
+      properties: {}
+    UpdateTrackDto:
+      type: object
+      properties: {}
