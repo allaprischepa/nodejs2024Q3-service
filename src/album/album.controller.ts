@@ -49,6 +49,7 @@ export class AlbumController {
    * Get all albums
    * @returns
    */
+  @ApiOperation({ summary: 'Get all albums' })
   @ApiExtraModels(AlbumEntity)
   @ApiResponse({
     status: 200,
@@ -56,7 +57,6 @@ export class AlbumController {
     type: AlbumEntity,
     isArray: true,
   })
-  @ApiOperation({ summary: 'Get all albums' })
   @Get()
   findAll() {
     return this.albumService.findAll();

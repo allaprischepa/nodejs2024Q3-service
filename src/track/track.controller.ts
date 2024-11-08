@@ -49,6 +49,7 @@ export class TrackController {
    * Get all tracks
    * @returns
    */
+  @ApiOperation({ summary: 'Get all tracks' })
   @ApiExtraModels(TrackEntity)
   @ApiResponse({
     status: 200,
@@ -56,7 +57,6 @@ export class TrackController {
     type: TrackEntity,
     isArray: true,
   })
-  @ApiOperation({ summary: 'Get all tracks' })
   @Get()
   findAll() {
     return this.trackService.findAll();

@@ -768,4 +768,20 @@ components:
         - duration
     FavsEntity:
       type: object
-      properties: {}
+      properties:
+        artists:
+          type: array
+          items:
+            $ref: "#/components/schemas/ArtistEntity"
+        albums:
+          type: array
+          items:
+            $ref: "#/components/schemas/AlbumEntity"
+        tracks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrackEntity"
+      required:
+        - artists
+        - albums
+        - tracks

@@ -53,6 +53,7 @@ export class UserController {
    * Get all users
    * @returns UserEntity[]
    */
+  @ApiOperation({ summary: 'Get all users' })
   @ApiExtraModels(UserEntity)
   @ApiResponse({
     status: 200,
@@ -60,7 +61,6 @@ export class UserController {
     type: UserEntity,
     isArray: true,
   })
-  @ApiOperation({ summary: 'Get all users' })
   @Get()
   findAll() {
     return this.userService.findAll();

@@ -50,6 +50,7 @@ export class ArtistController {
    * Get all artists
    * @returns ArtistEntity[]
    */
+  @ApiOperation({ summary: 'Get all artists' })
   @ApiExtraModels(ArtistEntity)
   @ApiResponse({
     status: 200,
@@ -57,7 +58,6 @@ export class ArtistController {
     type: ArtistEntity,
     isArray: true,
   })
-  @ApiOperation({ summary: 'Get all artists' })
   @Get()
   findAll() {
     return this.artistService.findAll();
