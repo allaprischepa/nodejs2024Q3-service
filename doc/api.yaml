@@ -418,6 +418,71 @@ paths:
           description: ""
       summary: Delete track
       tags: *a4
+  /favs:
+    post:
+      operationId: FavsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateFavDto"
+      responses:
+        "201":
+          description: ""
+      tags: &a5
+        - Favs
+    get:
+      operationId: FavsController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a5
+  /favs/{id}:
+    get:
+      operationId: FavsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a5
+    patch:
+      operationId: FavsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateFavDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a5
+    delete:
+      operationId: FavsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a5
 info:
   title: Home Library Service
   description: Home music library service
@@ -438,13 +503,13 @@ components:
           example: johndoe
         version:
           type: number
-          example: "1"
+          example: 1
         createdAt:
           type: number
-          example: "1731044862"
+          example: 1731044862
         updatedAt:
           type: number
-          example: "1731044862"
+          example: 1731044862
       required:
         - id
         - login
@@ -534,7 +599,7 @@ components:
           example: Best 2024
         year:
           type: number
-          example: "2024"
+          example: 2024
         artistId:
           type: string
           example: 6476c336-c646-4c28-bbea-7390b385518a
@@ -598,7 +663,7 @@ components:
           example: 7429cef1-0a5d-4fdd-9df4-2443d486d34a
         duration:
           type: number
-          example: "205"
+          example: 205
       required:
         - id
         - name
@@ -653,3 +718,9 @@ components:
         - artistId
         - albumId
         - duration
+    CreateFavDto:
+      type: object
+      properties: {}
+    UpdateFavDto:
+      type: object
+      properties: {}

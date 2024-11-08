@@ -23,7 +23,7 @@ export class TrackEntity implements Track {
   @ApiProperty({ example: '7429cef1-0a5d-4fdd-9df4-2443d486d34a' })
   albumId: string | null;
 
-  @ApiProperty({ example: '205' })
+  @ApiProperty({ example: 205 })
   duration: number;
 
   constructor(createTrackDto: CreateTrackDto) {

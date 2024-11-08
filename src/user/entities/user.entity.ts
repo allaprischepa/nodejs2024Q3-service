@@ -19,13 +19,13 @@ export class UserEntity implements User {
   @ApiProperty({ example: 'johndoe' })
   login: string;
 
-  @ApiProperty({ example: '1' })
+  @ApiProperty({ example: 1 })
   version: number;
 
-  @ApiProperty({ example: '1731044862' })
+  @ApiProperty({ example: 1731044862 })
   createdAt: number;
 
-  @ApiProperty({ example: '1731044862' })
+  @ApiProperty({ example: 1731044862 })
   updatedAt: number;
 
   @Exclude()

@@ -16,7 +16,7 @@ export class AlbumEntity implements Album {
   @ApiProperty({ example: 'Best 2024' })
   name: string;
 
-  @ApiProperty({ example: '2024' })
+  @ApiProperty({ example: 2024 })
   year: number;
 
   @ApiProperty({ example: '6476c336-c646-4c28-bbea-7390b385518a' })
