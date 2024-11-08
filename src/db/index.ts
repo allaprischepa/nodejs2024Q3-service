@@ -4,11 +4,14 @@ import { ArtistEntity } from 'src/artist/entities/artist.entity';
 import { ArtistModel } from './models/artist.model ';
 import { AlbumEntity } from 'src/album/entities/album.entity';
 import { AlbumModel } from './models/album.model ';
+import { TrackEntity } from 'src/track/entities/track.entity';
+import { TrackModel } from './models/track.model ';
 
 interface Data {
   user: UserEntity[];
   artist: ArtistEntity[];
   album: AlbumEntity[];
+  track: TrackEntity[];
 }
 
 export interface OnDeleteCallback {
@@ -21,6 +24,7 @@ export class Database {
     user: [],
     artist: [],
     album: [],
+    track: [],
   };
 
   private onDelete = (id: string, type: string) => {
@@ -38,6 +42,7 @@ export class Database {
   user = new UserModel(this.data.user, this.onDelete);
   artist = new ArtistModel(this.data.artist, this.onDelete);
   album = new AlbumModel(this.data.album, this.onDelete);
+  track = new TrackModel(this.data.track, this.onDelete);
 
   constructor() {
     if (Database.instance) {

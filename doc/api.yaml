@@ -326,7 +326,14 @@ paths:
               $ref: "#/components/schemas/CreateTrackDto"
       responses:
         "201":
-          description: ""
+          description: "Created: track created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackEntity"
+        "400":
+          description: "Bad Request: request body does not contain required fields"
+      summary: Create new track
       tags: &a4
         - Track
     get:
@@ -334,7 +341,14 @@ paths:
       parameters: []
       responses:
         "200":
-          description: ""
+          description: "OK: retrieved track list"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TrackEntity"
+      summary: Get all tracks
       tags: *a4
   /track/{id}:
     get:
@@ -343,19 +357,32 @@ paths:
         - name: id
           required: true
           in: path
+          description: The ID (UUID) of the track
           schema:
+            example: a0030c1c-6e2a-45fe-9653-6a8be16be998
             type: string
       responses:
         "200":
-          description: ""
+          description: "OK: retrieved track"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackEntity"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Not Found: track not found"
+      summary: Get track by id
       tags: *a4
-    patch:
+    put:
       operationId: TrackController_update
       parameters:
         - name: id
           required: true
           in: path
+          description: The ID (UUID) of the track
           schema:
+            example: a0030c1c-6e2a-45fe-9653-6a8be16be998
             type: string
       requestBody:
         required: true
@@ -365,7 +392,16 @@ paths:
               $ref: "#/components/schemas/UpdateTrackDto"
       responses:
         "200":
-          description: ""
+          description: "OK: updated track"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackEntity"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Not Found: track not found"
+      summary: Update track info
       tags: *a4
     delete:
       operationId: TrackController_remove
@@ -373,11 +409,14 @@ paths:
         - name: id
           required: true
           in: path
+          description: The ID (UUID) of the track
           schema:
+            example: a0030c1c-6e2a-45fe-9653-6a8be16be998
             type: string
       responses:
-        "200":
+        "204":
           description: ""
+      summary: Delete track
       tags: *a4
 info:
   title: Home Library Service
@@ -542,9 +581,75 @@ components:
         - name
         - year
         - artistId
+    TrackEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          example: a0030c1c-6e2a-45fe-9653-6a8be16be998
+        name:
+          type: string
+          example: Midnight Voyage
+        artistId:
+          type: string
+          example: 6476c336-c646-4c28-bbea-7390b385518a
+        albumId:
+          type: string
+          example: 7429cef1-0a5d-4fdd-9df4-2443d486d34a
+        duration:
+          type: number
+          example: "205"
+      required:
+        - id
+        - name
+        - artistId
+        - albumId
+        - duration
     CreateTrackDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+          description: Track name
+          example: Midnight Voyage
+        artistId:
+          type: string
+          description: Track artist id
+          example: 6476c336-c646-4c28-bbea-7390b385518a
+        albumId:
+          type: string
+          description: Track album id
+          example: 7429cef1-0a5d-4fdd-9df4-2443d486d34a
+        duration:
+          type: number
+          description: Track duration
+          example: "205"
+      required:
+        - name
+        - artistId
+        - albumId
+        - duration
     UpdateTrackDto:
       type: object
-      properties: {}
+      properties:
+        name:
+          type: string
+          description: Track name
+          example: Midnight Voyage
+        artistId:
+          type: string
+          description: Track artist id
+          example: 6476c336-c646-4c28-bbea-7390b385518a
+        albumId:
+          type: string
+          description: Track album id
+          example: 7429cef1-0a5d-4fdd-9df4-2443d486d34a
+        duration:
+          type: number
+          description: Track duration
+          example: "205"
+      required:
+        - name
+        - artistId
+        - albumId
+        - duration
