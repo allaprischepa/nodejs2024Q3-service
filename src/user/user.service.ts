@@ -31,16 +31,16 @@ export class UserService {
   }
 
   async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
-    const { newPassword, oldPassword } = updatePasswordDto;
+    const { oldPassword } = updatePasswordDto;
     const user = await this.ensureUserExists(id);
 
     if (!user.validatePassword(oldPassword)) {
       throw new ForbiddenException('The old password is incorrect');
     }
 
-    user.password = newPassword;
+    const updatedUser = await db.user.updatePassword(id, updatePasswordDto);
 
-    return user;
+    return updatedUser;
   }
 
   async remove(id: string) {
