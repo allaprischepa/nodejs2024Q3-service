@@ -1,6 +1,6 @@
 import { DocumentBuilder } from '@nestjs/swagger';
 
-export const docsPath = 'api';
+export const docsPath = 'doc';
 
 export const docsTitle = 'Home Library Service';
 
