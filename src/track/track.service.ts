@@ -41,11 +41,14 @@ export class TrackService {
     return db.track.delete(id);
   }
 
-  static async ensureTrackExists(id: string): Promise<TrackEntity> {
+  static async ensureTrackExists(
+    id: string,
+    exceptionType = NotFoundException,
+  ): Promise<TrackEntity> {
     const track = await db.track.findUnique(id);
 
     if (!track) {
-      throw new NotFoundException(`Track with id: ${id} not found`);
+      throw new exceptionType(`Track with id: ${id} not found`);
     }
 
     return track;

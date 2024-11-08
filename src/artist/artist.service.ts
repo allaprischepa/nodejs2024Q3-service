@@ -30,11 +30,14 @@ export class ArtistService {
     return db.artist.delete(id);
   }
 
-  static async ensureArtistExists(id: string): Promise<ArtistEntity> {
+  static async ensureArtistExists(
+    id: string,
+    exceptionType = NotFoundException,
+  ): Promise<ArtistEntity> {
     const artist = await db.artist.findUnique(id);
 
     if (!artist) {
-      throw new NotFoundException(`Artist with id: ${id} not found`);
+      throw new exceptionType(`Artist with id: ${id} not found`);
     }
 
     return artist;

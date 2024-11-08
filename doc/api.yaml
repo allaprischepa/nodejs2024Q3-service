@@ -419,30 +419,22 @@ paths:
       summary: Delete track
       tags: *a4
   /favs:
-    post:
-      operationId: FavsController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateFavDto"
-      responses:
-        "201":
-          description: ""
-      tags: &a5
-        - Favs
     get:
       operationId: FavsController_findAll
       parameters: []
       responses:
         "200":
-          description: ""
-      tags: *a5
-  /favs/{id}:
-    get:
-      operationId: FavsController_findOne
+          description: "OK: retrieved favorites"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FavsEntity"
+      summary: Get all favorites
+      tags: &a5
+        - Favs
+  /favs/track/{id}:
+    post:
+      operationId: FavsController_addTRack
       parameters:
         - name: id
           required: true
@@ -450,29 +442,16 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          description: ""
-      tags: *a5
-    patch:
-      operationId: FavsController_update
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateFavDto"
-      responses:
-        "200":
-          description: ""
+        "201":
+          description: "Created: track added to the favorites"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "422":
+          description: "Unprocessable Content: track not found"
+      summary: Add track to the favorites
       tags: *a5
     delete:
-      operationId: FavsController_remove
+      operationId: FavsController_removeTrack
       parameters:
         - name: id
           required: true
@@ -480,8 +459,77 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          description: ""
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Bad Request: track is not in the favorites"
+      summary: Delete track from favorites
+      tags: *a5
+  /favs/album/{id}:
+    post:
+      operationId: FavsController_addAlbum
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "201":
+          description: "Created: album added to the favorites"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "422":
+          description: "Unprocessable Content: album not found"
+      summary: Add album to the favorites
+      tags: *a5
+    delete:
+      operationId: FavsController_removeAlbum
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Bad Request: album is not in the favorites"
+      summary: Delete album from favorites
+      tags: *a5
+  /favs/artist/{id}:
+    post:
+      operationId: FavsController_addArtist
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "201":
+          description: "Created: artist added to the favorites"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "422":
+          description: "Unprocessable Content: artist not found"
+      summary: Add artist to the favorites
+      tags: *a5
+    delete:
+      operationId: FavsController_removeArtist
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Bad Request: artist is not in the favorites"
+      summary: Delete artist from favorites
       tags: *a5
 info:
   title: Home Library Service
@@ -718,9 +766,6 @@ components:
         - artistId
         - albumId
         - duration
-    CreateFavDto:
-      type: object
-      properties: {}
-    UpdateFavDto:
+    FavsEntity:
       type: object
       properties: {}

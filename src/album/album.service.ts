@@ -38,11 +38,14 @@ export class AlbumService {
     return db.album.delete(id);
   }
 
-  static async ensureAlbumExists(id: string): Promise<AlbumEntity> {
+  static async ensureAlbumExists(
+    id: string,
+    exceptionType = NotFoundException,
+  ): Promise<AlbumEntity> {
     const album = await db.album.findUnique(id);
 
     if (!album) {
-      throw new NotFoundException(`Album with id: ${id} not found`);
+      throw new exceptionType(`Album with id: ${id} not found`);
     }
 
     return album;
