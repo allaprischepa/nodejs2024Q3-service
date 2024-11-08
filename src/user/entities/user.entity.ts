@@ -2,6 +2,7 @@ import { Exclude, instanceToPlain } from 'class-transformer';
 import { v4 as uuidV4 } from 'uuid';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { hashSync, compareSync } from 'bcrypt';
+import { ApiProperty } from '@nestjs/swagger';
 
 interface User {
   id: string;
@@ -12,10 +13,19 @@ interface User {
 }
 
 export class UserEntity implements User {
+  @ApiProperty({ example: 'b04df18d-cfe7-4117-80bb-9f5a04d53d23' })
   id: string;
+
+  @ApiProperty({ example: 'johndoe' })
   login: string;
+
+  @ApiProperty({ example: '1' })
   version: number;
+
+  @ApiProperty({ example: '1731044862' })
   createdAt: number;
+
+  @ApiProperty({ example: '1731044862' })
   updatedAt: number;
 
   @Exclude()

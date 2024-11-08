@@ -1,1 +1,3 @@
 npm run lint:raw
+npm run swagger:convert
+git add doc/api.yaml
