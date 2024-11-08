@@ -201,7 +201,7 @@ paths:
         - name: id
           required: true
           in: path
-          description: The ID (UUID) of the user
+          description: The ID (UUID) of the artist
           schema:
             example: 6476c336-c646-4c28-bbea-7390b385518a
             type: string
@@ -210,6 +210,110 @@ paths:
           description: ""
       summary: Delete artist
       tags: *a2
+  /album:
+    post:
+      operationId: AlbumController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAlbumDto"
+      responses:
+        "201":
+          description: "Created: album created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlbumEntity"
+        "400":
+          description: "Bad Request: request body does not contain required fields"
+      summary: Create new album
+      tags: &a3
+        - Album
+    get:
+      operationId: AlbumController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: "OK: retrieved album list"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AlbumEntity"
+      summary: Get all albums
+      tags: *a3
+  /album/{id}:
+    get:
+      operationId: AlbumController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The ID (UUID) of the album
+          schema:
+            example: 7429cef1-0a5d-4fdd-9df4-2443d486d34a
+            type: string
+      responses:
+        "200":
+          description: "OK: retrieved album"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlbumEntity"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Not Found: album not found"
+      summary: Get single album by id
+      tags: *a3
+    put:
+      operationId: AlbumController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The ID (UUID) of the album
+          schema:
+            example: 7429cef1-0a5d-4fdd-9df4-2443d486d34a
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAlbumDto"
+      responses:
+        "200":
+          description: "OK: updated album"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlbumEntity"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Not Found: album not found"
+      summary: Update album info
+      tags: *a3
+    delete:
+      operationId: AlbumController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The ID (UUID) of the album
+          schema:
+            example: 7429cef1-0a5d-4fdd-9df4-2443d486d34a
+            type: string
+      responses:
+        "204":
+          description: ""
+      summary: Delete album
+      tags: *a3
 info:
   title: Home Library Service
   description: Home music library service
@@ -315,3 +419,57 @@ components:
       required:
         - name
         - grammy
+    AlbumEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 7429cef1-0a5d-4fdd-9df4-2443d486d34a
+        name:
+          type: string
+          example: Best 2024
+        year:
+          type: number
+          example: "2024"
+        artistId:
+          type: string
+          example: 6476c336-c646-4c28-bbea-7390b385518a
+      required:
+        - id
+        - name
+        - year
+        - artistId
+    CreateAlbumDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Album name
+          example: Best 2024
+        year:
+          type: number
+          description: Album release year
+          example: "2024"
+        artistId:
+          type: string
+          description: Album artist id
+          example: 6476c336-c646-4c28-bbea-7390b385518a
+      required:
+        - name
+        - year
+        - artistId
+    UpdateAlbumDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Album name
+          example: Best 2024
+        year:
+          type: number
+          description: Album release year
+          example: "2024"
+        artistId:
+          type: string
+          description: Album artist id
+          example: 6476c336-c646-4c28-bbea-7390b385518a

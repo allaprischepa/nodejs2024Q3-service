@@ -135,7 +135,7 @@ export class ArtistController {
   @ApiOperation({ summary: 'Delete artist' })
   @ApiParam({
     name: 'id',
-    description: 'The ID (UUID) of the user',
+    description: 'The ID (UUID) of the artist',
     example: '6476c336-c646-4c28-bbea-7390b385518a',
   })
   @Delete(':id')

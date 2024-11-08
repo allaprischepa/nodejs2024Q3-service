@@ -15,22 +15,22 @@ export class ArtistService {
   }
 
   async findOne(id: string) {
-    return this.ensureArtistExists(id);
+    return ArtistService.ensureArtistExists(id);
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
-    await this.ensureArtistExists(id);
+    await ArtistService.ensureArtistExists(id);
 
     return db.artist.update(id, updateArtistDto);
   }
 
   async remove(id: string) {
-    await this.ensureArtistExists(id);
+    await ArtistService.ensureArtistExists(id);
 
     return db.artist.delete(id);
   }
 
-  private async ensureArtistExists(id: string): Promise<ArtistEntity> {
+  static async ensureArtistExists(id: string): Promise<ArtistEntity> {
     const artist = await db.artist.findUnique(id);
 
     if (!artist) {
