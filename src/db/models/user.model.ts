@@ -2,14 +2,15 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { BaseModel } from './base.model';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UpdatePasswordDto } from 'src/user/dto/update-password.dto';
+import { OnDeleteCallback } from '..';
 
 export class UserModel extends BaseModel<
   CreateUserDto,
   UpdatePasswordDto,
   UserEntity
 > {
-  constructor(data: UserEntity[]) {
-    super(data, UserEntity);
+  constructor(data: UserEntity[], onDelete: OnDeleteCallback) {
+    super(data, 'user', onDelete, UserEntity);
   }
 
   async update(id: string, dto: UpdatePasswordDto): Promise<UserEntity> {

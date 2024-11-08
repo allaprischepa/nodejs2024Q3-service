@@ -1,10 +1,20 @@
+import { OnDeleteCallback } from '..';
 import { WhereInput } from '../types/types';
 
 export class BaseModel<CD, UD, T extends { id: string }> {
   private data: T[];
+  private type: string;
+  private onDelete: OnDeleteCallback;
 
-  constructor(data: T[], private entityClass: new (dto: CD) => T) {
+  constructor(
+    data: T[],
+    type: string,
+    onDelete: OnDeleteCallback,
+    private entityClass: new (dto: CD) => T,
+  ) {
     this.data = data;
+    this.type = type;
+    this.onDelete = onDelete;
   }
 
   async create(dto: CD) {
@@ -47,5 +57,7 @@ export class BaseModel<CD, UD, T extends { id: string }> {
     const index = this.data.findIndex((e) => e.id === id);
 
     this.data.splice(index, 1);
+
+    this.onDelete(id, this.type);
   }
 }

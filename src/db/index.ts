@@ -11,7 +11,11 @@ interface Data {
   album: AlbumEntity[];
 }
 
-class Database {
+export interface OnDeleteCallback {
+  (id: string, field: string): void;
+}
+
+export class Database {
   private static instance: Database;
   private data: Data = {
     user: [],
@@ -19,9 +23,21 @@ class Database {
     album: [],
   };
 
-  user = new UserModel(this.data.user);
-  artist = new ArtistModel(this.data.artist);
-  album = new AlbumModel(this.data.album);
+  private onDelete = (id: string, type: string) => {
+    const field = `${type}Id`;
+
+    Object.keys(this.data).forEach((key) => {
+      if (key === type) return;
+
+      this.data[key].forEach((e) => {
+        if (e[field] && e[field] === id) e[field] = null;
+      });
+    });
+  };
+
+  user = new UserModel(this.data.user, this.onDelete);
+  artist = new ArtistModel(this.data.artist, this.onDelete);
+  album = new AlbumModel(this.data.album, this.onDelete);
 
   constructor() {
     if (Database.instance) {
