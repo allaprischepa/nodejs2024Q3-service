@@ -3,9 +3,17 @@ import { BaseModel } from './base.model';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UpdatePasswordDto } from 'src/user/dto/update-password.dto';
 
-export class UserModel extends BaseModel<CreateUserDto, UserEntity> {
+export class UserModel extends BaseModel<
+  CreateUserDto,
+  UpdatePasswordDto,
+  UserEntity
+> {
   constructor(data: UserEntity[]) {
     super(data, UserEntity);
+  }
+
+  async update(id: string, dto: UpdatePasswordDto): Promise<UserEntity> {
+    return this.updatePassword(id, dto);
   }
 
   async updatePassword(

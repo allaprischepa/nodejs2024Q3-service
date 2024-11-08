@@ -1,6 +1,6 @@
 import { WhereInput } from '../types/types';
 
-export class BaseModel<CD, T extends { id: string }> {
+export class BaseModel<CD, UD, T extends { id: string }> {
   private data: T[];
 
   constructor(data: T[], private entityClass: new (dto: CD) => T) {
@@ -31,6 +31,16 @@ export class BaseModel<CD, T extends { id: string }> {
     }
 
     return entity || null;
+  }
+
+  async update(id: string, dto: UD) {
+    let entity = await this.findUnique(id);
+
+    if (entity) {
+      entity = { ...entity, ...dto };
+    }
+
+    return entity;
   }
 
   async delete(id: string) {

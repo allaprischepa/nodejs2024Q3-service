@@ -106,6 +106,110 @@ paths:
           description: ""
       summary: Delete user
       tags: *a1
+  /artist:
+    post:
+      operationId: ArtistController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateArtistDto"
+      responses:
+        "201":
+          description: "Created: artist created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArtistEntity"
+        "400":
+          description: "Bad Request: request body does not contain required fields"
+      summary: Create new artist
+      tags: &a2
+        - Artist
+    get:
+      operationId: ArtistController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: "OK: retrieved artist list"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArtistEntity"
+      summary: Get all artists
+      tags: *a2
+  /artist/{id}:
+    get:
+      operationId: ArtistController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The ID (UUID) of the artist
+          schema:
+            example: 6476c336-c646-4c28-bbea-7390b385518a
+            type: string
+      responses:
+        "200":
+          description: "OK: retrieved artist"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArtistEntity"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Not Found: artist not found"
+      summary: Get single artist by id
+      tags: *a2
+    put:
+      operationId: ArtistController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The ID (UUID) of the artist
+          schema:
+            example: 6476c336-c646-4c28-bbea-7390b385518a
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateArtistDto"
+      responses:
+        "200":
+          description: "OK: updated artist"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArtistEntity"
+        "400":
+          description: "Bad Request: id is not valid UUID"
+        "404":
+          description: "Not Found: artist not found"
+      summary: Update artist info
+      tags: *a2
+    delete:
+      operationId: ArtistController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The ID (UUID) of the user
+          schema:
+            example: 6476c336-c646-4c28-bbea-7390b385518a
+            type: string
+      responses:
+        "204":
+          description: ""
+      summary: Delete artist
+      tags: *a2
 info:
   title: Home Library Service
   description: Home music library service
@@ -167,3 +271,47 @@ components:
       required:
         - oldPassword
         - newPassword
+    ArtistEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6476c336-c646-4c28-bbea-7390b385518a
+        name:
+          type: string
+          example: DJ Funky Marmalade
+        grammy:
+          type: boolean
+          example: true
+      required:
+        - id
+        - name
+        - grammy
+    CreateArtistDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Artist name
+          example: DJ Funky Marmalade
+        grammy:
+          type: boolean
+          description: Artist grammy presense
+          example: true
+      required:
+        - name
+        - grammy
+    UpdateArtistDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Artist name
+          example: DJ Funky Marmalade
+        grammy:
+          type: boolean
+          description: Artist grammy presense
+          example: true
+      required:
+        - name
+        - grammy
