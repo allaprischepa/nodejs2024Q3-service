@@ -350,7 +350,7 @@ Performs on `/favs` route
     -  `status code` **400** and corresponding message if `artistId` is invalid (not `uuid`)
     -  `status code` **422** and corresponding message if artist with `id === artistId` doesn't exist
 
-  * `DELETE /favs/artist/:id` - delete artist from favorites
+  * `DELETE /favs/artist/:id` - delete artist from favorites  
     **Response:**  
     -  `status code` **204** if the artist was in favorites and now it's deleted id is found and deleted
     -  `status code` **400** and corresponding message if `artistId` is invalid (not `uuid`)
