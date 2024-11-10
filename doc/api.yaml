@@ -431,7 +431,7 @@ paths:
                 $ref: "#/components/schemas/FavsEntity"
       summary: Get all favorites
       tags: &a5
-        - Favs
+        - Favorites
   /favs/track/{id}:
     post:
       operationId: FavsController_addTRack

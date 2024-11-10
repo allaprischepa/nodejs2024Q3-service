@@ -8,9 +8,15 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
-import { ApiExtraModels, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FavsEntity } from './entities/favs.entity';
 
+@ApiTags('Favorites')
 @Controller('favs')
 export class FavsController {
   constructor(private readonly favsService: FavsService) {}
