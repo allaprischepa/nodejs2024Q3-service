@@ -6,6 +6,7 @@ import {
   Delete,
   ParseUUIDPipe,
   HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import {
@@ -75,7 +76,7 @@ export class FavsController {
     description: 'Bad Request: track is not in the favorites',
   })
   @Delete('track/:id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   removeTrack(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favsService.removeTrack(id);
   }
@@ -118,7 +119,7 @@ export class FavsController {
     description: 'Bad Request: album is not in the favorites',
   })
   @Delete('album/:id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   removeAlbum(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favsService.removeAlbum(id);
   }
@@ -161,7 +162,7 @@ export class FavsController {
     description: 'Bad Request: artist is not in the favorites',
   })
   @Delete('artist/:id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   removeArtist(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favsService.removeArtist(id);
   }

@@ -8,6 +8,7 @@ import {
   ParseUUIDPipe,
   Put,
   HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -138,7 +139,7 @@ export class AlbumController {
     example: '7429cef1-0a5d-4fdd-9df4-2443d486d34a',
   })
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.albumService.remove(id);
   }

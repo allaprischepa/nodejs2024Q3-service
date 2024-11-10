@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   HttpCode,
   Put,
+  HttpStatus,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -139,7 +140,7 @@ export class ArtistController {
     example: '6476c336-c646-4c28-bbea-7390b385518a',
   })
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.artistService.remove(id);
   }
