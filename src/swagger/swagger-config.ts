@@ -1,11 +1,10 @@
 import { DocumentBuilder } from '@nestjs/swagger';
+import { appDescription, appName } from 'src/app.settings';
 
 export const docsPath = 'doc';
 
-export const docsTitle = 'Home Library Service';
-
 export const docsConfig = new DocumentBuilder()
-  .setTitle(docsTitle)
-  .setDescription('Home music library service')
+  .setTitle(appName)
+  .setDescription(appDescription)
   .setVersion('0.1')
   .build();

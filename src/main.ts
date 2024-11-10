@@ -1,17 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule } from '@nestjs/swagger';
-import 'dotenv/config';
-import { env } from 'process';
 import { ValidationPipe } from '@nestjs/common';
-import { docsPath, docsConfig, docsTitle } from './swagger/swagger-config';
+import { docsPath, docsConfig } from './swagger/swagger-config';
+import { appName, port } from './app.settings';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = env.PORT || 4000;
 
   const document = SwaggerModule.createDocument(app, docsConfig);
-  SwaggerModule.setup(docsPath, app, document, { customSiteTitle: docsTitle });
+  SwaggerModule.setup(docsPath, app, document, { customSiteTitle: appName });
 
   app.useGlobalPipes(new ValidationPipe());
 

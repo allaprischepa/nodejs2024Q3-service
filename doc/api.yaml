@@ -533,7 +533,9 @@ paths:
       tags: *a5
 info:
   title: Home Library Service
-  description: Home music library service
+  description: The Home Library Service allows users to manage data about Artists,
+    Tracks, and Albums by performing CRUD operations (Create, Read, Update,
+    Delete) and adding them to their Favorites in a personalized home library.
   version: "0.1"
   contact: {}
 tags: []
