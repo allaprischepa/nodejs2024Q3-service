@@ -10,6 +10,7 @@ services:
       - ${PORT}:${PORT}
     environment:
       - PORT=${PORT}
+      - DATABASE_URL=${DATABASE_URL}
     volumes:
       - ./src:/app/src
     networks:

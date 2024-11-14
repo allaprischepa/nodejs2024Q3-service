@@ -1,5 +1,4 @@
 import { UserEntity } from 'src/user/entities/user.entity';
-import { UserModel } from './models/user.model';
 import { ArtistEntity } from 'src/artist/entities/artist.entity';
 import { ArtistModel } from './models/artist.model ';
 import { AlbumEntity } from 'src/album/entities/album.entity';
@@ -52,7 +51,6 @@ export class Database {
     });
   };
 
-  user = new UserModel(this.data.user, this.onDelete);
   artist = new ArtistModel(this.data.artist, this.onDelete);
   album = new AlbumModel(this.data.album, this.onDelete);
   track = new TrackModel(this.data.track, this.onDelete);
