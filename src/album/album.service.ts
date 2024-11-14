@@ -1,50 +1,53 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import db from 'src/db';
 import { AlbumEntity } from './entities/album.entity';
 import { ArtistService } from 'src/artist/artist.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AlbumService {
-  constructor(private readonly artistService: ArtistService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly artistService: ArtistService,
+  ) {}
 
   async create(createAlbumDto: CreateAlbumDto) {
     const { artistId } = createAlbumDto;
 
     if (artistId) await this.artistService.ensureArtistExists(artistId);
 
-    return db.album.create(createAlbumDto);
+    return this.prisma.album.create({ data: createAlbumDto });
   }
 
   async findAll() {
-    return db.album.findMany();
+    return this.prisma.album.findMany();
   }
 
   async findOne(id: string) {
-    return AlbumService.ensureAlbumExists(id);
+    return this.ensureAlbumExists(id);
   }
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
     const { artistId } = updateAlbumDto;
 
-    await AlbumService.ensureAlbumExists(id);
+    await this.ensureAlbumExists(id);
     if (artistId) await this.artistService.ensureArtistExists(artistId);
 
-    return db.album.update(id, updateAlbumDto);
+    return this.prisma.album.update({ where: { id }, data: updateAlbumDto });
   }
 
   async remove(id: string) {
-    await AlbumService.ensureAlbumExists(id);
+    await this.ensureAlbumExists(id);
 
-    return db.album.delete(id);
+    return this.prisma.album.delete({ where: { id } });
   }
 
-  static async ensureAlbumExists(
+  async ensureAlbumExists(
     id: string,
     exceptionType = NotFoundException,
   ): Promise<AlbumEntity> {
-    const album = await db.album.findUnique(id);
+    const album = await this.prisma.album.findUnique({ where: { id } });
 
     if (!album) {
       throw new exceptionType(`Album with id: ${id} not found`);
