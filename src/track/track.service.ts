@@ -8,10 +8,12 @@ import { TrackEntity } from './entities/track.entity';
 
 @Injectable()
 export class TrackService {
+  constructor(private readonly artistService: ArtistService) {}
+
   async create(createTrackDto: CreateTrackDto) {
     const { artistId, albumId } = createTrackDto;
 
-    if (artistId) await ArtistService.ensureArtistExists(artistId);
+    if (artistId) await this.artistService.ensureArtistExists(artistId);
     if (albumId) await AlbumService.ensureAlbumExists(albumId);
 
     return db.track.create(createTrackDto);
@@ -29,7 +31,7 @@ export class TrackService {
     const { artistId, albumId } = updateTrackDto;
 
     await TrackService.ensureTrackExists(id);
-    if (artistId) await ArtistService.ensureArtistExists(artistId);
+    if (artistId) await this.artistService.ensureArtistExists(artistId);
     if (albumId) await AlbumService.ensureAlbumExists(albumId);
 
     return db.track.update(id, updateTrackDto);

@@ -7,10 +7,12 @@ import { ArtistService } from 'src/artist/artist.service';
 
 @Injectable()
 export class AlbumService {
+  constructor(private readonly artistService: ArtistService) {}
+
   async create(createAlbumDto: CreateAlbumDto) {
     const { artistId } = createAlbumDto;
 
-    if (artistId) await ArtistService.ensureArtistExists(artistId);
+    if (artistId) await this.artistService.ensureArtistExists(artistId);
 
     return db.album.create(createAlbumDto);
   }
@@ -27,7 +29,7 @@ export class AlbumService {
     const { artistId } = updateAlbumDto;
 
     await AlbumService.ensureAlbumExists(id);
-    if (artistId) await ArtistService.ensureArtistExists(artistId);
+    if (artistId) await this.artistService.ensureArtistExists(artistId);
 
     return db.album.update(id, updateAlbumDto);
   }

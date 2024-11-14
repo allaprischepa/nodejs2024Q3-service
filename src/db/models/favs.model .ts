@@ -24,6 +24,6 @@ export class FavsModel {
   }
 
   findMany() {
-    return this.favsEntity.toJSON();
+    return this.favsEntity;
   }
 }

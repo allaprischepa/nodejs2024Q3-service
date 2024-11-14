@@ -10,6 +10,7 @@ import { TrackService } from 'src/track/track.service';
 
 @Injectable()
 export class FavsService {
+  constructor(private readonly artistService: ArtistService) {}
   async findAll() {
     return db.favs.findMany();
   }
@@ -47,7 +48,10 @@ export class FavsService {
   }
 
   async addArtist(id: string) {
-    await ArtistService.ensureArtistExists(id, UnprocessableEntityException);
+    await this.artistService.ensureArtistExists(
+      id,
+      UnprocessableEntityException,
+    );
 
     await db.favs.artists.add(id);
 

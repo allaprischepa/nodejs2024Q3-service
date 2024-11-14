@@ -1,40 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import db from 'src/db';
 import { ArtistEntity } from './entities/artist.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ArtistService {
+  constructor(private readonly prisma: PrismaService) {}
+
   async create(createArtistDto: CreateArtistDto) {
-    return db.artist.create(createArtistDto);
+    return this.prisma.artist.create({ data: createArtistDto });
   }
 
   async findAll() {
-    return db.artist.findMany();
+    return this.prisma.artist.findMany();
   }
 
   async findOne(id: string) {
-    return ArtistService.ensureArtistExists(id);
+    return this.ensureArtistExists(id);
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
-    await ArtistService.ensureArtistExists(id);
+    await this.ensureArtistExists(id);
 
-    return db.artist.update(id, updateArtistDto);
+    return this.prisma.artist.update({
+      where: { id },
+      data: updateArtistDto,
+    });
   }
 
   async remove(id: string) {
-    await ArtistService.ensureArtistExists(id);
+    await this.ensureArtistExists(id);
 
-    return db.artist.delete(id);
+    return this.prisma.artist.delete({ where: { id } });
   }
 
-  static async ensureArtistExists(
+  async ensureArtistExists(
     id: string,
     exceptionType = NotFoundException,
   ): Promise<ArtistEntity> {
-    const artist = await db.artist.findUnique(id);
+    const artist = await this.prisma.artist.findUnique({ where: { id } });
 
     if (!artist) {
       throw new exceptionType(`Artist with id: ${id} not found`);
