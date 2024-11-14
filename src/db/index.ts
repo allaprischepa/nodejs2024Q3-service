@@ -2,7 +2,6 @@ import { UserEntity } from 'src/user/entities/user.entity';
 import { ArtistEntity } from 'src/artist/entities/artist.entity';
 import { AlbumEntity } from 'src/album/entities/album.entity';
 import { TrackEntity } from 'src/track/entities/track.entity';
-import { TrackModel } from './models/track.model ';
 import { FavsEntity } from 'src/favs/entities/favs.entity';
 import { FavsModel } from './models/favs.model ';
 
@@ -49,7 +48,6 @@ export class Database {
     });
   };
 
-  track = new TrackModel(this.data.track, this.onDelete);
   favs = new FavsModel(this.data.favs);
 
   constructor() {

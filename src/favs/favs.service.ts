@@ -13,13 +13,14 @@ export class FavsService {
   constructor(
     private readonly artistService: ArtistService,
     private readonly albumService: AlbumService,
+    private readonly trackService: TrackService,
   ) {}
   async findAll() {
     return db.favs.findMany();
   }
 
   async addTrack(id: string) {
-    await TrackService.ensureTrackExists(id, UnprocessableEntityException);
+    await this.trackService.ensureTrackExists(id, UnprocessableEntityException);
 
     await db.favs.tracks.add(id);
 

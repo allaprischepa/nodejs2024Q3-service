@@ -1,14 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateTrackDto } from '../dto/create-track.dto';
-import { v4 as uuidV4 } from 'uuid';
-
-interface Track {
-  id: string;
-  name: string;
-  artistId: string | null;
-  albumId: string | null;
-  duration: number;
-}
+import { Track } from '@prisma/client';
 
 export class TrackEntity implements Track {
   @ApiProperty({ example: 'a0030c1c-6e2a-45fe-9653-6a8be16be998' })
@@ -25,14 +16,4 @@ export class TrackEntity implements Track {
 
   @ApiProperty({ example: 205 })
   duration: number;
-
-  constructor(createTrackDto: CreateTrackDto) {
-    const { name, artistId, albumId, duration } = createTrackDto;
-
-    this.id = uuidV4();
-    this.name = name;
-    this.artistId = artistId;
-    this.albumId = albumId;
-    this.duration = duration;
-  }
 }

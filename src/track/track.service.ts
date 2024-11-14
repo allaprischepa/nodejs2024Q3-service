@@ -3,12 +3,13 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { ArtistService } from 'src/artist/artist.service';
 import { AlbumService } from 'src/album/album.service';
-import db from 'src/db';
 import { TrackEntity } from './entities/track.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TrackService {
   constructor(
+    private readonly prisma: PrismaService,
     private readonly artistService: ArtistService,
     private readonly albumService: AlbumService,
   ) {}
@@ -19,38 +20,38 @@ export class TrackService {
     if (artistId) await this.artistService.ensureArtistExists(artistId);
     if (albumId) await this.albumService.ensureAlbumExists(albumId);
 
-    return db.track.create(createTrackDto);
+    return this.prisma.track.create({ data: createTrackDto });
   }
 
   async findAll() {
-    return db.track.findMany();
+    return this.prisma.track.findMany();
   }
 
   async findOne(id: string) {
-    return TrackService.ensureTrackExists(id);
+    return this.ensureTrackExists(id);
   }
 
   async update(id: string, updateTrackDto: UpdateTrackDto) {
     const { artistId, albumId } = updateTrackDto;
 
-    await TrackService.ensureTrackExists(id);
+    await this.ensureTrackExists(id);
     if (artistId) await this.artistService.ensureArtistExists(artistId);
     if (albumId) await this.albumService.ensureAlbumExists(albumId);
 
-    return db.track.update(id, updateTrackDto);
+    return this.prisma.track.update({ where: { id }, data: updateTrackDto });
   }
 
   async remove(id: string) {
-    await TrackService.ensureTrackExists(id);
+    await this.ensureTrackExists(id);
 
-    return db.track.delete(id);
+    return this.prisma.track.delete({ where: { id } });
   }
 
-  static async ensureTrackExists(
+  async ensureTrackExists(
     id: string,
     exceptionType = NotFoundException,
   ): Promise<TrackEntity> {
-    const track = await db.track.findUnique(id);
+    const track = await this.prisma.track.findUnique({ where: { id } });
 
     if (!track) {
       throw new exceptionType(`Track with id: ${id} not found`);
