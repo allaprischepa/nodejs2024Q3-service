@@ -5,7 +5,9 @@ networks:
 services:
   app:
     container_name: hls-app
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.app
     ports:
       - ${PORT}:${PORT}
     environment:
@@ -21,7 +23,9 @@ services:
 
   postgres:
     container_name: hls-postgres
-    build: ./database/
+    build:
+      context: .
+      dockerfile: Dockerfile.db
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
