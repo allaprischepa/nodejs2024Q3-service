@@ -5,9 +5,7 @@ networks:
 services:
   app:
     container_name: hls-app
-    build:
-      context: .
-      dockerfile: Dockerfile.app
+    image: allaprishchepa/nodejs2024q3-service:app
     ports:
       - ${PORT}:${PORT}
     environment:
@@ -23,9 +21,7 @@ services:
 
   postgres:
     container_name: hls-postgres
-    build:
-      context: .
-      dockerfile: Dockerfile.db
+    image: allaprishchepa/nodejs2024q3-service:postgres
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:

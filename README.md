@@ -7,10 +7,6 @@ The **Home Library Service** is an application where users can manage a personal
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Running Application](#running-application)
-  - [Standard Mode](#standart-mode)
-  - [Development Mode](#development-mode)
-  - [Debug Mode](#debug-mode)
-  - [Production Mode](#production-mode)
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
   - [User](#user)
@@ -19,6 +15,19 @@ The **Home Library Service** is an application where users can manage a personal
   - [Track](#track)
   - [Favorites](#favorites)
 - [Testing](#testing)
+- [Docker: Commands](#docker-commands)
+  - [Starting the Application](#starting-the-application)
+  - [Stopping the Application](#stopping-the-application)
+  - [Removing Containers and Volumes](#removing-containers-and-volumes)
+  - [Restarting the Application](#restarting-the-application)
+  - [Viewing Container Logs](#viewing-container-logs)
+  - [Viewing Running Containers](#viewing-running-containers)
+  - [Stopping a Specific Container](#stopping-a-specific-container)
+  - [Starting a Specific Container](#starting-a-specific-container)
+  - [Updating Images and Restarting](#updating-images-and-restarting)
+  - [Interactive Session with a Container](#interactive-session-with-a-container)
+  - [Login](#login)
+- [Docker: Security Scanning](#docker-security-scanning)
 - [Formatting](#formatting)
   - [List of Errors and Warnings](#list-of-errors-and-warnings)
   - [Auto-fix and Format](#auto-fix-and-format)
@@ -30,6 +39,9 @@ The **Home Library Service** is an application where users can manage a personal
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker - [Download & Install Docker](https://docs.docker.com/engine/install/)
+- `Docker Hub` Account - Sign Up on [Docker Hub](https://hub.docker.com/)
+- Docker Scout (for scanning images) - [Download & Install Docker Scout](https://docs.docker.com/scout/install/)
 
 ## Installation
 
@@ -45,9 +57,8 @@ The **Home Library Service** is an application where users can manage a personal
 
     ```bash
     cd nodejs2024Q3-service
-    git checkout rest-service
+    git checkout docker-database
     ```
-
 3. **Install dependencies**:  
 
     Make sure you are using Node.js version 22.x.x (22.9.0 or higher).
@@ -58,44 +69,29 @@ The **Home Library Service** is an application where users can manage a personal
 4. **Set up the environment**:  
 
     Create a `.env` file at the root of the project based on the `.env.example` file.  
-    The `.env.example` contains an example of how to define the port on which the application will run:  
+    The `.env.example` contains an example of how to define the port on which the application will run and postgres variables:  
     ```
     PORT=4000
+
+    POSTGRES_PORT=5432
+    POSTGRES_USER=hls_postgress
+    POSTGRES_PASSWORD=hls_postgress
+    POSTGRES_DB=hls_postgress
     ```
     If `PORT` variable is not provided, the application will use port `4000` by default.
+
+    > [!NOTE]  
+    > You do not need to change `DATABASE_URL` variable. Just leave it as is.
 
 ## Running application
 
 <a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
 
-The application can be run in four modes: **standart**, **development**, **debug** and **production**.
-
-### Standart Mode
-
-```bash
-npm run start
-```
-
-### Development Mode
-
-In development mode, the server will automatically restart when changes are detected. Use the following command:
+The application can be run using `Docker`.  
+Go to the root project directory and run the following command:
 
 ```bash
-npm run start:dev
-```
-
-### Debug Mode
-
-```bash
-npm run start:debag
-```
-
-### Production Mode
-
-To run the application in production mode use the command:
-
-```bash
-npm run start:prod
+docker-compose up
 ```
 
 After starting the app on port (4000 as default) you can open
@@ -106,10 +102,15 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 <a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
 
-Create a `.env` file to configure the application port. Example:
+Create a `.env` file to configure the application port and variables for postgres database connection. Example:
 
 ```
 PORT=4000
+
+POSTGRES_PORT=5432
+POSTGRES_USER=hls_postgress
+POSTGRES_PASSWORD=hls_postgress
+POSTGRES_DB=hls_postgress
 ```
 
 - `PORT`: The port on which the application will listen requests.
@@ -385,6 +386,151 @@ To run only specific test suite with authorization
 ```
 npm run test:auth -- <path to suite>
 ```
+
+Here’s a README for useful Docker Compose commands for users working with your application:
+
+---
+
+## Docker: Commands
+
+<a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
+
+There are several commands that will be useful while the application usage. 
+
+### Starting the application
+
+To start all services defined in the `docker-compose.yml` file, use the following command:
+
+```bash
+docker-compose up
+```
+
+If you want to run the services in detached mode (in the background), add the `-d` flag:
+
+```bash
+docker-compose up -d
+```
+
+### Stopping the application
+
+To stop all containers running through Docker Compose:
+
+```bash
+docker-compose down
+```
+
+### Removing containers and volumes
+
+To remove all containers and volumes (including database data):
+
+```bash
+docker-compose down --volumes
+```
+
+This will remove all volumes used by the containers, such as `postgres_data`, which can be useful for clearing data.
+
+### Restarting the application
+
+```bash
+docker-compose restart
+```
+
+### Viewing container logs
+
+To view the logs of all containers in real-time:
+
+```bash
+docker-compose logs -f
+```
+
+If you want to view the logs of a specific container, such as the app container, use:
+
+```bash
+docker-compose logs -f app
+```
+
+### Viewing running containers
+
+```bash
+docker-compose ps
+```
+
+### Stopping a specific container
+
+If you want to stop only the app container (without affecting others), run:
+
+```bash
+docker-compose stop app
+```
+
+### Starting a specific container
+
+To start only one container, such as the `app` container:
+
+```bash
+docker-compose up -d app
+```
+
+Similarly, to start only the `postgres` container:
+
+```bash
+docker-compose up -d postgres
+```
+
+### Updating images and restarting
+
+If you need to update the images, use the following command:
+
+```bash
+docker-compose pull
+```
+
+Then restart the containers:
+
+```bash
+docker-compose up
+```
+or
+
+```bash
+docker-compose up -d
+```
+
+### Interactive session with a container
+
+If you need to enter the app container for debugging or development, run an interactive session:
+
+```bash
+docker-compose exec app /bin/sh
+```
+
+This will open a terminal inside the `app` container where you can execute commands. To close the terminal type `exit` and press `enter`.
+
+### Login
+
+To authenticate to a registry with a username and password run the following command (and type the password when asked):
+
+```bash
+docker login -u <your_username>
+```
+
+## Docker: Security Scanning
+
+<a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
+
+#### Images:
+- App image: `allaprishchepa/nodejs2024q3-service:app`
+- PostgreSQL image: `allaprishchepa/nodejs2024q3-service:postgres`
+
+---
+
+You can run the folowing command to scan the App and the PostgreSQL images for security vulnerabilities:
+
+```bash
+npm run docker:scan-images
+```
+
+> [!NOTE] You must be logged into the Docker registry and have Docker Scout installed to perform the scan
 
 ## Formatting
 
