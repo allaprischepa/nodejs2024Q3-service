@@ -87,11 +87,15 @@ The **Home Library Service** is an application where users can manage a personal
 
 <a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
 
-The application can be run using `Docker`.  
+The application can be run using `Docker`.
+
+ > [!NOTE]  
+ > Unlike Compose V1, Compose V2 integrates into the Docker CLI platform and the recommended command-line syntax is `docker compose`. So if you are using Compose V1 run commands with `docker-compose`.
+ 
 Go to the root project directory and run the following command:
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 After starting the app on port (4000 as default) you can open
@@ -395,6 +399,9 @@ Here’s a README for useful Docker Compose commands for users working with your
 
 <a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
 
+ > [!NOTE]  
+ > Unlike Compose V1, Compose V2 integrates into the Docker CLI platform and the recommended command-line syntax is `docker compose`. So if you are using Compose V1 run commands with `docker-compose`.
+
 There are several commands that will be useful while the application usage. 
 
 ### Starting the application
@@ -402,13 +409,13 @@ There are several commands that will be useful while the application usage.
 To start all services defined in the `docker-compose.yml` file, use the following command:
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 If you want to run the services in detached mode (in the background), add the `-d` flag:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Stopping the application
@@ -416,7 +423,7 @@ docker-compose up -d
 To stop all containers running through Docker Compose:
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### Removing containers and volumes
@@ -424,7 +431,7 @@ docker-compose down
 To remove all containers and volumes (including database data):
 
 ```bash
-docker-compose down --volumes
+docker compose down --volumes
 ```
 
 This will remove all volumes used by the containers, such as `postgres_data`, which can be useful for clearing data.
@@ -432,7 +439,7 @@ This will remove all volumes used by the containers, such as `postgres_data`, wh
 ### Restarting the application
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### Viewing container logs
@@ -440,19 +447,19 @@ docker-compose restart
 To view the logs of all containers in real-time:
 
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 If you want to view the logs of a specific container, such as the app container, use:
 
 ```bash
-docker-compose logs -f app
+docker compose logs -f app
 ```
 
 ### Viewing running containers
 
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 ### Stopping a specific container
@@ -460,7 +467,7 @@ docker-compose ps
 If you want to stop only the app container (without affecting others), run:
 
 ```bash
-docker-compose stop app
+docker compose stop app
 ```
 
 ### Starting a specific container
@@ -468,13 +475,13 @@ docker-compose stop app
 To start only one container, such as the `app` container:
 
 ```bash
-docker-compose up -d app
+docker compose up -d app
 ```
 
 Similarly, to start only the `postgres` container:
 
 ```bash
-docker-compose up -d postgres
+docker compose up -d postgres
 ```
 
 ### Updating images and restarting
@@ -482,18 +489,18 @@ docker-compose up -d postgres
 If you need to update the images, use the following command:
 
 ```bash
-docker-compose pull
+docker compose pull
 ```
 
 Then restart the containers:
 
 ```bash
-docker-compose up
+docker compose up
 ```
 or
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Interactive session with a container
@@ -501,7 +508,7 @@ docker-compose up -d
 If you need to enter the app container for debugging or development, run an interactive session:
 
 ```bash
-docker-compose exec app /bin/sh
+docker compose exec app /bin/sh
 ```
 
 This will open a terminal inside the `app` container where you can execute commands. To close the terminal type `exit` and press `enter`.
