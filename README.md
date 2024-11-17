@@ -80,8 +80,8 @@ The **Home Library Service** is an application where users can manage a personal
     ```
     If `PORT` variable is not provided, the application will use port `4000` by default.
 
-    > [!NOTE]  
-    > You do not need to change `DATABASE_URL` variable. Just leave it as is.
+  > [!NOTE]  
+  > You do not need to change `DATABASE_URL` variable. Just leave it as is.
 
 ## Running application
 
@@ -89,8 +89,8 @@ The **Home Library Service** is an application where users can manage a personal
 
 The application can be run using `Docker`.
 
- > [!NOTE]  
- > Unlike Compose V1, Compose V2 integrates into the Docker CLI platform and the recommended command-line syntax is `docker compose`. So if you are using Compose V1 run commands with `docker-compose`.
+> [!NOTE]  
+> Unlike Compose V1, Compose V2 integrates into the Docker CLI platform and the recommended command-line syntax is `docker compose`. So if you are using Compose V1 run commands with `docker-compose`.
  
 Go to the root project directory and run the following command:
 
@@ -123,7 +123,7 @@ POSTGRES_DB=hls_postgress
 
 <a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
 
-> [!NOTE]  
+> [!TIP]  
 > You can find detailed API documentation by visiting [http://localhost:4000/doc](http://localhost:4000/doc) after starting the application, or by accessing the OpenAPI specification file located at `/doc/api.yaml`  
 
 You can perform requests using tools like Postman, curl, or similar.  
@@ -391,16 +391,12 @@ To run only specific test suite with authorization
 npm run test:auth -- <path to suite>
 ```
 
-Here’s a README for useful Docker Compose commands for users working with your application:
-
----
-
 ## Docker: Commands
 
 <a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
 
- > [!NOTE]  
- > Unlike Compose V1, Compose V2 integrates into the Docker CLI platform and the recommended command-line syntax is `docker compose`. So if you are using Compose V1 run commands with `docker-compose`.
+> [!NOTE]  
+> Unlike Compose V1, Compose V2 integrates into the Docker CLI platform and the recommended command-line syntax is `docker compose`. So if you are using Compose V1 run commands with `docker-compose`.
 
 There are several commands that will be useful while the application usage. 
 
@@ -537,7 +533,8 @@ You can run the folowing command to scan the App and the PostgreSQL images for s
 npm run docker:scan-images
 ```
 
-> [!NOTE] You must be logged into the Docker registry and have Docker Scout installed to perform the scan
+> [!IMPORTANT]  
+> You must be logged into the Docker registry and have Docker Scout installed to perform the scan
 
 ## Formatting
 
