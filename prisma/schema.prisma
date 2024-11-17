@@ -15,6 +15,8 @@ model User {
   version   Int       @default(1)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  // favorites Favorites?
 }
 
 model Artist {
@@ -24,6 +26,7 @@ model Artist {
 
   tracks  Track[]
   albums  Album[]
+  favorites Favorites[] @relation("FavoriteArtist")
 }
 
 model Track {
@@ -35,6 +38,7 @@ model Track {
 
   artist    Artist? @relation(fields: [artistId], references: [id])
   album     Album?  @relation(fields: [albumId], references: [id])
+  favorites Favorites[] @relation("FavoriteTrack")
 }
 
 model Album {
@@ -45,12 +49,15 @@ model Album {
 
   artist    Artist? @relation(fields: [artistId], references: [id])
   tracks    Track[]
+  favorites Favorites[] @relation("FavoriteAlbum")
 }
 
 model Favorites {
   id      String  @id @default(uuid())
-  userId  String
-  artists String[]
-  albums  String[]
-  tracks  String[]
+  userId  String @unique
+
+  // user User @relation(fields: [userId], references: [id])
+  artists Artist[] @relation("FavoriteArtist")
+  albums  Album[] @relation("FavoriteAlbum")
+  tracks  Track[] @relation("FavoriteTrack")
 }

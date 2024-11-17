@@ -5,7 +5,7 @@ networks:
 services:
   app:
     container_name: hls-app
-    image: allaprishchepa/nodejs2024q3-service:app
+    image: allaprishchepa/nodejs2024q3-service:app-v2
     ports:
       - ${PORT}:${PORT}
     environment:
@@ -13,6 +13,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     volumes:
       - ./src:/app/src
+      - ./prisma:/app/prisma
     networks:
       - hls-network
     depends_on:
