@@ -12,10 +12,12 @@ services:
       - PORT=${PORT}
       - DATABASE_URL=${DATABASE_URL}
       - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FILE_MAX_SIZE=${LOG_FILE_MAX_SIZE}
       - CRYPT_SALT=${CRYPT_SALT}
     volumes:
       - ./src:/app/src
       - ./prisma:/app/prisma
+      - ./logs:/app/logs
     networks:
       - hls-network
     depends_on:

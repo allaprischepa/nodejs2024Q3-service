@@ -4,9 +4,7 @@ import { AppLoggerService } from './app-logger.service';
 
 @Injectable()
 export class AppLoggerMiddleware implements NestMiddleware {
-  constructor(private readonly logger: AppLoggerService) {
-    logger.setContext('HttpRequest');
-  }
+  constructor(private readonly logger: AppLoggerService) {}
 
   use(request: Request, response: Response, next: NextFunction): void {
     const { originalUrl: url, method, query, body } = request;
@@ -22,7 +20,7 @@ export class AppLoggerMiddleware implements NestMiddleware {
         status: `${statusCode} ${statusMessage}`,
       };
 
-      this.logger.log(JSON.stringify(message));
+      this.logger.log(JSON.stringify(message), 'HttpRequest');
     });
 
     next();

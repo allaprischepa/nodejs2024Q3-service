@@ -19,11 +19,17 @@ async function bootstrap() {
   SwaggerModule.setup(docsPath, app, document, { customSiteTitle: appName });
 
   process.on('uncaughtException', (err) => {
-    logger.error(`Uncaught Exception: ${err}`);
+    const stack = err.stack;
+    logger.error(`Uncaught Exception: ${err}`, stack, 'Application');
   });
 
   process.on('unhandledRejection', (reason, promise) => {
-    logger.error(`Unhandled Rejection at: ${promise} reason: ${reason}`);
+    const stack = reason instanceof Error ? reason.stack : null;
+    logger.error(
+      `Unhandled Rejection. Reason: ${reason}`,
+      stack,
+      'Application',
+    );
   });
 
   await app.listen(port, () => {
