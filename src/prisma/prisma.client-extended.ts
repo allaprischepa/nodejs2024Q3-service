@@ -1,12 +1,18 @@
 import { PrismaClient } from '@prisma/client';
 import { compareSync, hashSync } from 'bcrypt';
+import 'dotenv/config';
+import { env } from 'process';
 
 type ExtendedPrismaClient = ReturnType<typeof extendPrismaClient>;
 
 export const extendPrismaClient = (prismaClient: PrismaClient) => {
+  const cryptSalt = +env.CRYPT_SALT || 10;
   const updateArgsUserPassword = <T extends object>(args: T) => {
     if ('data' in args && args.data['password']) {
-      args.data['password'] = hashSync(args.data['password'] as string, 10);
+      args.data['password'] = hashSync(
+        args.data['password'] as string,
+        cryptSalt,
+      );
     }
 
     return args;
