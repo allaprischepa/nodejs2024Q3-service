@@ -9,7 +9,7 @@ import { env } from 'process';
 export class AppLoggerService extends ConsoleLogger {
   private logsPath = path.resolve('.', 'logs', 'app.log');
   private errorLogsPath = path.resolve('.', 'logs', 'error.log');
-  private maxFileSize = +env.LOG_FILE_MAX_SIZE || 10 * 1024 * 1024; // 10MiB by default
+  private maxFileSize = (+env.LOG_FILE_MAX_SIZE || 10) * 1024;
 
   constructor() {
     super();
