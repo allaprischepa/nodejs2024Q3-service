@@ -1,12 +1,22 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Public } from './auth.settings';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @ApiOperation({ summary: 'Sign Up' })
   @ApiResponse({
     status: 201,
@@ -25,6 +35,7 @@ export class AuthController {
     return this.authService.signUp(authDto);
   }
 
+  @Public()
   @ApiOperation({ summary: 'Login' })
   @ApiResponse({
     status: 200,
@@ -42,5 +53,29 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   signIn(@Body() authDto: AuthDto) {
     return this.authService.signIn(authDto);
+  }
+
+  @Public()
+  @ApiOperation({ summary: 'Get new pair of Access token and Refresh token' })
+  @ApiResponse({
+    status: 200,
+    description: 'Tokens refreshed successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized: request body does not contain refreshToken',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden: refreshToken is invalid or expired',
+  })
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  refresh(@Body() refreshTokenDto: RefreshTokenDto) {
+    if (!refreshTokenDto || !refreshTokenDto.refreshToken) {
+      throw new UnauthorizedException('Refresh Token is required');
+    }
+
+    return this.authService.refresh(refreshTokenDto);
   }
 }

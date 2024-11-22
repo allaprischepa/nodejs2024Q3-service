@@ -570,6 +570,25 @@ paths:
           description: "Forbidden: authentication failed"
       summary: Login
       tags: *a6
+  /auth/refresh:
+    post:
+      operationId: AuthController_refresh
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenDto"
+      responses:
+        "200":
+          description: Tokens refreshed successfully
+        "401":
+          description: "Unauthorized: request body does not contain refreshToken"
+        "403":
+          description: "Forbidden: refreshToken is invalid or expired"
+      summary: Get new pair of Access token and Refresh token
+      tags: *a6
 info:
   title: Home Library Service
   description: The Home Library Service allows users to manage data about Artists,
@@ -840,3 +859,12 @@ components:
       required:
         - login
         - password
+    RefreshTokenDto:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+          description: Refresh token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjZDBkOWQwMi1lYWJlLTQ5YTItOTA4Ny0zOWNlMzFjMTliMTYiLCJsb2dpbiI6InBlbGxlbnRlc3F1ZV91dCIsImlhdCI6MTczMjI3OTQ2OH0.yyvydRJK-jIHwzC4ZxeinT_lCOW2Dtrrf_Wfo_oxRWU
+      required:
+        - refreshToken
