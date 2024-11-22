@@ -14,6 +14,8 @@ The **Home Library Service** is an application where users can manage a personal
   - [Album](#album)
   - [Track](#track)
   - [Favorites](#favorites)
+  - [Auth](#auth)
+- [Logging](#logging)
 - [Testing](#testing)
 - [Docker: Commands](#docker-commands)
   - [Starting the Application](#starting-the-application)
@@ -53,11 +55,11 @@ The **Home Library Service** is an application where users can manage a personal
     git clone https://github.com/allaprischepa/nodejs2024Q3-service.git
     ```
 
-2. **Go to the project folder and select `rest-service` branch**:  
+2. **Go to the project folder and select `auth-logging` branch**:  
 
     ```bash
     cd nodejs2024Q3-service
-    git checkout docker-database
+    git checkout auth-logging
     ```
 3. **Install dependencies**:  
 
@@ -69,7 +71,7 @@ The **Home Library Service** is an application where users can manage a personal
 4. **Set up the environment**:  
 
     Create a `.env` file at the root of the project based on the `.env.example` file.  
-    The `.env.example` contains an example of how to define the port on which the application will run and postgres variables:  
+    The `.env.example` contains an example of how to define the port on which the application will run, postgres variables, JWT settings and logging settings:  
     ```
     PORT=4000
 
@@ -77,6 +79,17 @@ The **Home Library Service** is an application where users can manage a personal
     POSTGRES_USER=hls_postgress
     POSTGRES_PASSWORD=hls_postgress
     POSTGRES_DB=hls_postgress
+
+    CRYPT_SALT=10
+    JWT_SECRET_KEY=secret123123
+    JWT_SECRET_REFRESH_KEY=secret123123
+    TOKEN_EXPIRE_TIME=1h
+    TOKEN_REFRESH_EXPIRE_TIME=24h
+
+    DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
+
+    LOG_LEVEL=3
+    LOG_FILE_MAX_SIZE=10
     ```
     If `PORT` variable is not provided, the application will use port `4000` by default.
 
@@ -106,7 +119,7 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 <a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
 
-Create a `.env` file to configure the application port and variables for postgres database connection. Example:
+Create a `.env` file to configure the application port, variables for postgres database connection, JWT authentication settings and logging settings. Example:
 
 ```
 PORT=4000
@@ -115,6 +128,17 @@ POSTGRES_PORT=5432
 POSTGRES_USER=hls_postgress
 POSTGRES_PASSWORD=hls_postgress
 POSTGRES_DB=hls_postgress
+
+CRYPT_SALT=10
+JWT_SECRET_KEY=secret123123
+JWT_SECRET_REFRESH_KEY=secret123123
+TOKEN_EXPIRE_TIME=1h
+TOKEN_REFRESH_EXPIRE_TIME=24h
+
+DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
+
+LOG_LEVEL=3
+LOG_FILE_MAX_SIZE=10
 ```
 
 - `PORT`: The port on which the application will listen requests.
@@ -360,6 +384,69 @@ Performs on `/favs` route
     -  `status code` **204** if the artist was in favorites and now it's deleted id is found and deleted
     -  `status code` **400** and corresponding message if `artistId` is invalid (not `uuid`)
     -  `status code` **404** and corresponding message if corresponding artist is not favorite
+
+### Auth
+
+<a href="#api-endpoints" style="font-size: 0.8em; color: gray;">⬆️ Back to API Endpoints</a>
+
+Performs on `/auth` route  
+
+  * `POST /auth/signup` - send `login` and `password` to create a new user  
+    **Request Body:**  
+    JSON object with the following data: 
+    - `login` (string) - Required;
+    - `password` (string) - Required;  
+
+    **Response:**  
+    -  `status code` **201** and corresponding message if dto is valid
+    -  `status code` **400** and corresponding message if dto is invalid (no `login` or `password`, or they are not a strings)
+
+  * `POST /auth/login` - send `login` and `password`  to get Access token and Refresh token  
+    **Request Body:**  
+    JSON object with the following data: 
+    - `login` (string) - Required;
+    - `password` (string) - Required;  
+    
+    **Response:**  
+    -  `status code` **201** and corresponding message if dto is valid
+    -  `status code` **400** and corresponding message if dto is invalid (no `login` or `password`, or they are not a strings)  
+    -  `status code` **403** and corresponding message if authentication failed (no user with such `login`, `password` doesn't match actual one, etc.)
+
+  * `POST /auth/refresh` - send refresh token in body as `{ refreshToken }` to get new pair of Access token and Refresh token  
+    **Request Body:**  
+    JSON object with the following data: 
+    - `refreshToken` (string) - Required;
+    
+    **Response:**  
+    -  `status code` **200** and tokens in body if dto is valid  
+    -  `status code` **401** and corresponding message if dto is invalid (no `refreshToken` in body)    
+    -  `status code` **403** and corresponding message if authentication failed (Refresh token is invalid or expired)
+
+## Logging
+
+<a href="#table-of-contents" style="font-size: 0.8em; color: gray;">⬆️ Back to Table of Contents</a>
+
+### Logging Management
+
+The application provides configurable logging through environment variables. Here's how to manage it:
+
+- **`LOG_LEVEL`**: Defines the log severity. For example:
+  - `3` will log `fatal`, `error`, `warn`, and `log` messages.
+  - Adjust this value to control the verbosity of logs.
+  
+- **`LOG_FILE_MAX_SIZE`**: Sets the maximum size (in KB) of the log file before it rotates. For instance, `10` means the log file will rotate when it reaches 10 KB.
+
+### Log Storage
+Logs are stored in the `/logs` directory in the root of the application.
+
+### Clear Logs
+To remove all log files, run the following command:
+
+```bash
+npm run docker:rm-logs
+```
+
+This command will delete all existing log files, keeping the logs folder clean.
 
 ## Testing
 
