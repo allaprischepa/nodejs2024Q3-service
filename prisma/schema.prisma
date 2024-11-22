@@ -16,7 +16,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  // favorites Favorites?
+  favorites Favorites?
 }
 
 model Artist {
@@ -56,7 +56,7 @@ model Favorites {
   id      String  @id @default(uuid())
   userId  String @unique
 
-  // user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   artists Artist[] @relation("FavoriteArtist")
   albums  Album[] @relation("FavoriteAlbum")
   tracks  Track[] @relation("FavoriteTrack")

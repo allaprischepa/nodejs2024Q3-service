@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  Request,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import {
@@ -34,8 +35,10 @@ export class FavsController {
     type: FavsEntity,
   })
   @Get()
-  findAll() {
-    return this.favsService.findAll();
+  findAll(@Request() request) {
+    const { user } = request;
+
+    return this.favsService.findAll(user.userId);
   }
 
   /**
@@ -57,8 +60,10 @@ export class FavsController {
     description: 'Unprocessable Content: track not found',
   })
   @Post('track/:id')
-  addTRack(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.addTrack(id);
+  addTRack(@Param('id', new ParseUUIDPipe()) id: string, @Request() request) {
+    const { user } = request;
+
+    return this.favsService.addTrack(id, user.userId);
   }
 
   /**
@@ -77,8 +82,13 @@ export class FavsController {
   })
   @Delete('track/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeTrack(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.removeTrack(id);
+  removeTrack(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Request() request,
+  ) {
+    const { user } = request;
+
+    return this.favsService.removeTrack(id, user.userId);
   }
 
   /**
@@ -100,8 +110,10 @@ export class FavsController {
     description: 'Unprocessable Content: album not found',
   })
   @Post('album/:id')
-  addAlbum(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.addAlbum(id);
+  addAlbum(@Param('id', new ParseUUIDPipe()) id: string, @Request() request) {
+    const { user } = request;
+
+    return this.favsService.addAlbum(id, user.userId);
   }
 
   /**
@@ -120,8 +132,13 @@ export class FavsController {
   })
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeAlbum(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.removeAlbum(id);
+  removeAlbum(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Request() request,
+  ) {
+    const { user } = request;
+
+    return this.favsService.removeAlbum(id, user.userId);
   }
 
   /**
@@ -143,8 +160,10 @@ export class FavsController {
     description: 'Unprocessable Content: artist not found',
   })
   @Post('artist/:id')
-  addArtist(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.addArtist(id);
+  addArtist(@Param('id', new ParseUUIDPipe()) id: string, @Request() request) {
+    const { user } = request;
+
+    return this.favsService.addArtist(id, user.userId);
   }
 
   /**
@@ -163,7 +182,12 @@ export class FavsController {
   })
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeArtist(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.removeArtist(id);
+  removeArtist(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Request() request,
+  ) {
+    const { user } = request;
+
+    return this.favsService.removeArtist(id, user.userId);
   }
 }

@@ -16,14 +16,14 @@ export class FavsService {
     private readonly albumService: AlbumService,
     private readonly trackService: TrackService,
   ) {}
-  async findOne() {
+  async findOne(userId: string) {
     let favorites = await this.prisma.favorites.findFirst({
-      where: { userId: '0' },
+      where: { userId },
     });
 
     if (!favorites) {
       favorites = await this.prisma.favorites.create({
-        data: { userId: '0' },
+        data: { userId },
       });
     }
 
@@ -40,8 +40,8 @@ export class FavsService {
     return extendedFavorites;
   }
 
-  async findAll() {
-    const favorites = await this.findOne();
+  async findAll(userId: string) {
+    const favorites = await this.findOne(userId);
 
     return {
       artists: favorites.artists,
@@ -50,13 +50,13 @@ export class FavsService {
     };
   }
 
-  async addTrack(id: string) {
+  async addTrack(id: string, userId: string) {
     const track = await this.trackService.ensureTrackExists(
       id,
       UnprocessableEntityException,
     );
 
-    const favorites = await this.findOne();
+    const favorites = await this.findOne(userId);
 
     await this.prisma.favorites.update({
       where: { id: favorites.id },
@@ -70,8 +70,8 @@ export class FavsService {
     return `Track with id: ${id} added to favorites`;
   }
 
-  async removeTrack(id: string) {
-    const favorites = await this.findOne();
+  async removeTrack(id: string, userId: string) {
+    const favorites = await this.findOne(userId);
     const existingTracks = favorites.tracks;
     const trackToRemove = favorites.tracks.find((track) => track.id === id);
 
@@ -89,10 +89,10 @@ export class FavsService {
     });
   }
 
-  async addAlbum(id: string) {
+  async addAlbum(id: string, userId: string) {
     await this.albumService.ensureAlbumExists(id, UnprocessableEntityException);
 
-    const favorites = await this.findOne();
+    const favorites = await this.findOne(userId);
 
     await this.prisma.favorites.update({
       where: { id: favorites.id },
@@ -106,8 +106,8 @@ export class FavsService {
     return `Album with id: ${id} added to favorites`;
   }
 
-  async removeAlbum(id: string) {
-    const favorites = await this.findOne();
+  async removeAlbum(id: string, userId: string) {
+    const favorites = await this.findOne(userId);
     const existingAlbums = favorites.albums;
 
     if (!existingAlbums.some((album) => album.id === id)) {
@@ -124,13 +124,13 @@ export class FavsService {
     });
   }
 
-  async addArtist(id: string) {
+  async addArtist(id: string, userId: string) {
     await this.artistService.ensureArtistExists(
       id,
       UnprocessableEntityException,
     );
 
-    const favorites = await this.findOne();
+    const favorites = await this.findOne(userId);
 
     await this.prisma.favorites.update({
       where: { id: favorites.id },
@@ -144,8 +144,8 @@ export class FavsService {
     return `Artist with id: ${id} added to favorites`;
   }
 
-  async removeArtist(id: string) {
-    const favorites = await this.findOne();
+  async removeArtist(id: string, userId: string) {
+    const favorites = await this.findOne(userId);
     const existingArtists = favorites.artists;
 
     if (!existingArtists.some((artist) => artist.id === id)) {
