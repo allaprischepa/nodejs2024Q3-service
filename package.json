@@ -27,7 +27,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prepare": "husky",
     "swagger:convert": "ts-node -r tsconfig-paths/register src/swagger/swagger-converter.ts",
-    "docker:scan-images": "docker scout cves allaprishchepa/nodejs2024q3-service:app-v2 && docker scout cves allaprishchepa/nodejs2024q3-service:postgres"
+    "docker:scan-images": "docker scout cves allaprishchepa/nodejs2024q3-service:app-v2 && docker scout cves allaprishchepa/nodejs2024q3-service:postgres",
+    "docker:rm-logs": "docker exec hls-app sh -c \"rm -rf /app/logs/*\""
   },
   "dependencies": {
     "@nestjs/common": "^10.4.7",
