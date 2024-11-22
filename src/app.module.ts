@@ -10,6 +10,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AppLoggerModule } from './app-logger/app-logger.module';
 import { AppLoggerService } from './app-logger/app-logger.service';
 import { AppLoggerMiddleware } from './app-logger/app-logger.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AppLoggerMiddleware } from './app-logger/app-logger.middleware';
     FavsModule,
     PrismaModule,
     AppLoggerModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppLoggerService],

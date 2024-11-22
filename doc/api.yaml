@@ -531,6 +531,45 @@ paths:
           description: "Bad Request: artist is not in the favorites"
       summary: Delete artist from favorites
       tags: *a5
+  /auth/signup:
+    post:
+      operationId: AuthController_signUp
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthDto"
+      responses:
+        "201":
+          description: User signed up successfully
+        "400":
+          description: "Bad Request: request body does not contain required fields"
+        "409":
+          description: "Conflict: user already exists"
+      summary: Sign Up
+      tags: &a6
+        - Auth
+  /auth/login:
+    post:
+      operationId: AuthController_signIn
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthDto"
+      responses:
+        "200":
+          description: User logged in successfully
+        "400":
+          description: "Bad Request: request body does not contain required fields"
+        "403":
+          description: "Forbidden: authentication failed"
+      summary: Login
+      tags: *a6
 info:
   title: Home Library Service
   description: The Home Library Service allows users to manage data about Artists,
@@ -787,3 +826,17 @@ components:
         - artists
         - albums
         - tracks
+    AuthDto:
+      type: object
+      properties:
+        login:
+          type: string
+          description: User login
+          example: johndoe
+        password:
+          type: string
+          description: User password
+          example: P@ssw0rd
+      required:
+        - login
+        - password

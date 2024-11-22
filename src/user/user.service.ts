@@ -7,6 +7,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -40,9 +41,7 @@ export class UserService {
     const { oldPassword, newPassword } = updatePasswordDto;
     const user = await this.ensureUserExists(id);
 
-    if (
-      !this.prisma.extended.user.validatePassword(oldPassword, user.password)
-    ) {
+    if (!this.validatePassword(oldPassword, user)) {
       throw new ForbiddenException('The old password is incorrect');
     }
 
@@ -72,5 +71,25 @@ export class UserService {
     }
 
     return user;
+  }
+
+  public async ensureUserExistsByLogin(
+    login: string,
+    exceptionType = NotFoundException,
+    exceptionMessage = `User with login: ${login} not found`,
+  ) {
+    const user = await this.prisma.extended.user.findUnique({
+      where: { login },
+    });
+
+    if (!user) {
+      throw new exceptionType(exceptionMessage);
+    }
+
+    return user;
+  }
+
+  public validatePassword(password: string, user: UserEntity) {
+    return this.prisma.extended.user.validatePassword(password, user.password);
   }
 }
