@@ -11,13 +11,16 @@ import {
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import {
+  ApiBearerAuth,
   ApiExtraModels,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { FavsEntity } from './entities/favs.entity';
+import { AUTH_NAME } from 'src/swagger/swagger-config';
 
+@ApiBearerAuth(AUTH_NAME)
 @ApiTags('Favorites')
 @Controller('favs')
 export class FavsController {

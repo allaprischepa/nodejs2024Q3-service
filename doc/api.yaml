@@ -21,8 +21,10 @@ paths:
           description: "Bad Request: request body does not contain required fields"
         "409":
           description: "Conflict: user already exists"
+      security: &a1
+        - bearerAuth: []
       summary: Create new user
-      tags: &a1
+      tags: &a2
         - User
     get:
       operationId: UserController_findAll
@@ -36,8 +38,9 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/UserEntity"
+      security: *a1
       summary: Get all users
-      tags: *a1
+      tags: *a2
   /user/{id}:
     get:
       operationId: UserController_findOne
@@ -60,8 +63,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Not Found: user not found"
+      security: *a1
       summary: Get single user by id
-      tags: *a1
+      tags: *a2
     put:
       operationId: UserController_updatePassword
       parameters:
@@ -89,8 +93,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Not Found: user not found"
+      security: *a1
       summary: Update user password
-      tags: *a1
+      tags: *a2
     delete:
       operationId: UserController_remove
       parameters:
@@ -104,8 +109,9 @@ paths:
       responses:
         "204":
           description: ""
+      security: *a1
       summary: Delete user
-      tags: *a1
+      tags: *a2
   /artist:
     post:
       operationId: ArtistController_create
@@ -125,8 +131,10 @@ paths:
                 $ref: "#/components/schemas/ArtistEntity"
         "400":
           description: "Bad Request: request body does not contain required fields"
+      security: &a3
+        - bearerAuth: []
       summary: Create new artist
-      tags: &a2
+      tags: &a4
         - Artist
     get:
       operationId: ArtistController_findAll
@@ -140,8 +148,9 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ArtistEntity"
+      security: *a3
       summary: Get all artists
-      tags: *a2
+      tags: *a4
   /artist/{id}:
     get:
       operationId: ArtistController_findOne
@@ -164,8 +173,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Not Found: artist not found"
+      security: *a3
       summary: Get single artist by id
-      tags: *a2
+      tags: *a4
     put:
       operationId: ArtistController_update
       parameters:
@@ -193,8 +203,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Not Found: artist not found"
+      security: *a3
       summary: Update artist info
-      tags: *a2
+      tags: *a4
     delete:
       operationId: ArtistController_remove
       parameters:
@@ -208,8 +219,9 @@ paths:
       responses:
         "204":
           description: ""
+      security: *a3
       summary: Delete artist
-      tags: *a2
+      tags: *a4
   /album:
     post:
       operationId: AlbumController_create
@@ -229,8 +241,10 @@ paths:
                 $ref: "#/components/schemas/AlbumEntity"
         "400":
           description: "Bad Request: request body does not contain required fields"
+      security: &a5
+        - bearerAuth: []
       summary: Create new album
-      tags: &a3
+      tags: &a6
         - Album
     get:
       operationId: AlbumController_findAll
@@ -244,8 +258,9 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/AlbumEntity"
+      security: *a5
       summary: Get all albums
-      tags: *a3
+      tags: *a6
   /album/{id}:
     get:
       operationId: AlbumController_findOne
@@ -268,8 +283,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Not Found: album not found"
+      security: *a5
       summary: Get single album by id
-      tags: *a3
+      tags: *a6
     put:
       operationId: AlbumController_update
       parameters:
@@ -297,8 +313,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Not Found: album not found"
+      security: *a5
       summary: Update album info
-      tags: *a3
+      tags: *a6
     delete:
       operationId: AlbumController_remove
       parameters:
@@ -312,8 +329,9 @@ paths:
       responses:
         "204":
           description: ""
+      security: *a5
       summary: Delete album
-      tags: *a3
+      tags: *a6
   /track:
     post:
       operationId: TrackController_create
@@ -333,8 +351,10 @@ paths:
                 $ref: "#/components/schemas/TrackEntity"
         "400":
           description: "Bad Request: request body does not contain required fields"
+      security: &a7
+        - bearerAuth: []
       summary: Create new track
-      tags: &a4
+      tags: &a8
         - Track
     get:
       operationId: TrackController_findAll
@@ -348,8 +368,9 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TrackEntity"
+      security: *a7
       summary: Get all tracks
-      tags: *a4
+      tags: *a8
   /track/{id}:
     get:
       operationId: TrackController_findOne
@@ -372,8 +393,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Not Found: track not found"
+      security: *a7
       summary: Get track by id
-      tags: *a4
+      tags: *a8
     put:
       operationId: TrackController_update
       parameters:
@@ -401,8 +423,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Not Found: track not found"
+      security: *a7
       summary: Update track info
-      tags: *a4
+      tags: *a8
     delete:
       operationId: TrackController_remove
       parameters:
@@ -416,8 +439,9 @@ paths:
       responses:
         "204":
           description: ""
+      security: *a7
       summary: Delete track
-      tags: *a4
+      tags: *a8
   /favs:
     get:
       operationId: FavsController_findAll
@@ -429,8 +453,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FavsEntity"
+      security: &a9
+        - bearerAuth: []
       summary: Get all favorites
-      tags: &a5
+      tags: &a10
         - Favorites
   /favs/track/{id}:
     post:
@@ -448,8 +474,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "422":
           description: "Unprocessable Content: track not found"
+      security: *a9
       summary: Add track to the favorites
-      tags: *a5
+      tags: *a10
     delete:
       operationId: FavsController_removeTrack
       parameters:
@@ -463,8 +490,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Bad Request: track is not in the favorites"
+      security: *a9
       summary: Delete track from favorites
-      tags: *a5
+      tags: *a10
   /favs/album/{id}:
     post:
       operationId: FavsController_addAlbum
@@ -481,8 +509,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "422":
           description: "Unprocessable Content: album not found"
+      security: *a9
       summary: Add album to the favorites
-      tags: *a5
+      tags: *a10
     delete:
       operationId: FavsController_removeAlbum
       parameters:
@@ -496,8 +525,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Bad Request: album is not in the favorites"
+      security: *a9
       summary: Delete album from favorites
-      tags: *a5
+      tags: *a10
   /favs/artist/{id}:
     post:
       operationId: FavsController_addArtist
@@ -514,8 +544,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "422":
           description: "Unprocessable Content: artist not found"
+      security: *a9
       summary: Add artist to the favorites
-      tags: *a5
+      tags: *a10
     delete:
       operationId: FavsController_removeArtist
       parameters:
@@ -529,8 +560,9 @@ paths:
           description: "Bad Request: id is not valid UUID"
         "404":
           description: "Bad Request: artist is not in the favorites"
+      security: *a9
       summary: Delete artist from favorites
-      tags: *a5
+      tags: *a10
   /auth/signup:
     post:
       operationId: AuthController_signUp
@@ -549,7 +581,7 @@ paths:
         "409":
           description: "Conflict: user already exists"
       summary: Sign Up
-      tags: &a6
+      tags: &a11
         - Auth
   /auth/login:
     post:
@@ -569,7 +601,7 @@ paths:
         "403":
           description: "Forbidden: authentication failed"
       summary: Login
-      tags: *a6
+      tags: *a11
   /auth/refresh:
     post:
       operationId: AuthController_refresh
@@ -588,7 +620,7 @@ paths:
         "403":
           description: "Forbidden: refreshToken is invalid or expired"
       summary: Get new pair of Access token and Refresh token
-      tags: *a6
+      tags: *a11
 info:
   title: Home Library Service
   description: The Home Library Service allows users to manage data about Artists,
@@ -599,6 +631,11 @@ info:
 tags: []
 servers: []
 components:
+  securitySchemes:
+    bearerAuth:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
   schemas:
     UserEntity:
       type: object

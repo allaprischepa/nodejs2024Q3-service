@@ -14,13 +14,16 @@ import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import {
+  ApiBearerAuth,
   ApiExtraModels,
   ApiOperation,
   ApiParam,
   ApiResponse,
 } from '@nestjs/swagger';
 import { AlbumEntity } from './entities/album.entity';
+import { AUTH_NAME } from 'src/swagger/swagger-config';
 
+@ApiBearerAuth(AUTH_NAME)
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}

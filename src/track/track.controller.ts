@@ -14,13 +14,16 @@ import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import {
+  ApiBearerAuth,
   ApiExtraModels,
   ApiOperation,
   ApiParam,
   ApiResponse,
 } from '@nestjs/swagger';
 import { TrackEntity } from './entities/track.entity';
+import { AUTH_NAME } from 'src/swagger/swagger-config';
 
+@ApiBearerAuth(AUTH_NAME)
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}

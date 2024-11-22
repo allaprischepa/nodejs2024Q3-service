@@ -14,13 +14,16 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import {
+  ApiBearerAuth,
   ApiExtraModels,
   ApiOperation,
   ApiParam,
   ApiResponse,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { AUTH_NAME } from 'src/swagger/swagger-config';
 
+@ApiBearerAuth(AUTH_NAME)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
