@@ -31,9 +31,15 @@ export class AppLoggerService extends ConsoleLogger {
     if (!fileExist) this.writeFile(filePath, '');
     const stat = fs.statSync(filePath);
 
-    if (stat.size > this.maxFileSize) this.rotateFile(filePath);
+    if (stat.size + this.stringSize(`${msg}\n`) > this.maxFileSize) {
+      this.rotateFile(filePath);
+    }
 
-    fs.appendFileSync(filePath, msg + '\n', 'utf8');
+    fs.appendFileSync(filePath, `${msg}\n`, 'utf8');
+  }
+
+  private stringSize(str: string) {
+    return new Blob([str]).size;
   }
 
   private fileExists(filePath: string) {
