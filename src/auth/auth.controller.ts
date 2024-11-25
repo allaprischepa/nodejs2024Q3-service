@@ -1,15 +1,8 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Public } from './auth.settings';
+import { RefreshTokenRequired, Public } from './auth.settings';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
@@ -55,7 +48,7 @@ export class AuthController {
     return this.authService.signIn(authDto);
   }
 
-  @Public()
+  @RefreshTokenRequired()
   @ApiOperation({ summary: 'Get new pair of Access token and Refresh token' })
   @ApiResponse({
     status: 200,
@@ -72,10 +65,6 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   refresh(@Body() refreshTokenDto: RefreshTokenDto) {
-    if (!refreshTokenDto || !refreshTokenDto.refreshToken) {
-      throw new UnauthorizedException('Refresh Token is required');
-    }
-
     return this.authService.refresh(refreshTokenDto);
   }
 }

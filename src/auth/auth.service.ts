@@ -1,19 +1,13 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { AuthDto } from './dto/auth.dto';
-import { JwtService } from '@nestjs/jwt';
-import { jwtSettings } from './auth.settings';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
+import { messages, refreshTokenOptions, tokenOptions } from './auth.settings';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
-  private frbddnMsg = 'Login or password is incorrect';
-  private readonly refreshTokenOptions = {
-    secret: jwtSettings.refresh_secret_key,
-    expiresIn: jwtSettings.refresh_expire_time,
-  };
-
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
@@ -24,10 +18,10 @@ export class AuthService {
       userId: user.id,
       login: user.login,
     };
-    const accessToken = await this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(payload, tokenOptions);
     const refreshToken = await this.jwtService.signAsync(
       payload,
-      this.refreshTokenOptions,
+      refreshTokenOptions,
     );
 
     return {
@@ -46,11 +40,11 @@ export class AuthService {
     const user = await this.userService.ensureUserExistsByLogin(
       login,
       ForbiddenException,
-      this.frbddnMsg,
+      messages.forbidden,
     );
 
     if (!this.userService.validatePassword(password, user)) {
-      throw new ForbiddenException(this.frbddnMsg);
+      throw new ForbiddenException(messages.forbidden);
     }
 
     return this.getTokens(user);
@@ -62,18 +56,23 @@ export class AuthService {
     try {
       const payload = await this.jwtService.verifyAsync(
         refreshToken,
-        this.refreshTokenOptions,
+        refreshTokenOptions,
       );
 
       const user = await this.userService.ensureUserExistsByLogin(
         payload.login,
         ForbiddenException,
-        this.frbddnMsg,
+        messages.invalid_rfrsh_token,
       );
 
       return this.getTokens(user);
-    } catch {
-      throw new ForbiddenException(this.frbddnMsg);
+    } catch (err) {
+      const msg =
+        err instanceof TokenExpiredError
+          ? messages.expired_rfrsh_token
+          : messages.invalid_rfrsh_token;
+
+      throw new ForbiddenException(msg);
     }
   }
 }
