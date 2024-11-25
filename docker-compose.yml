@@ -1,0 +1,50 @@
+networks:
+  hls-network:
+    driver: bridge
+
+services:
+  app:
+    container_name: hls-app
+    image: allaprishchepa/nodejs2024q3-service:app-v2
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      - PORT=${PORT}
+      - DATABASE_URL=${DATABASE_URL}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FILE_MAX_SIZE=${LOG_FILE_MAX_SIZE}
+      - CRYPT_SALT=${CRYPT_SALT}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_SECRET_REFRESH_KEY=${JWT_SECRET_REFRESH_KEY}
+      - TOKEN_EXPIRE_TIME=${TOKEN_EXPIRE_TIME}
+      - TOKEN_REFRESH_EXPIRE_TIME=${TOKEN_REFRESH_EXPIRE_TIME}
+    volumes:
+      - ./src:/app/src
+      - ./prisma:/app/prisma
+      - ./logs:/app/logs
+    networks:
+      - hls-network
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    container_name: hls-postgres
+    image: allaprishchepa/nodejs2024q3-service:postgres
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_logs:/var/log/postgresql
+    networks:
+      - hls-network
+    restart: always
+
+volumes:
+  postgres_data:
+  postgres_logs:

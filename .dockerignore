@@ -34,4 +34,16 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Git-related files
+.git
+.gitignore
+
+# Docker-related files
+.dockerignore
+Dockerfile*
+docker-compose.yml
+
 .env
+.env.example
+/.husky
+/doc
